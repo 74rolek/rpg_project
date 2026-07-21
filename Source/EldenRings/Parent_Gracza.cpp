@@ -2,13 +2,14 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
-ARPGPlayer::ARPGPlayer()
+AParent_Gracza::AParent_Gracza()
 {
 	PrimaryActorTick.bCanEverTick = true;
 }
 
-void ARPGPlayer::BeginPlay()
+void AParent_Gracza::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -19,20 +20,28 @@ void ARPGPlayer::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+
+	// Ustawienie domyślnej prędkości na chodzenie
+	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 }
 
-void ARPGPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void AParent_Gracza::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ARPGPlayer::Move);
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ARPGPlayer::Look);
+		// Podpięcie ruchu i myszki
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AParent_Gracza::Move);
+		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AParent_Gracza::Look);
+
+		// Podpięcie sprintu (naciśnięcie i puszczenie Shift)
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &AParent_Gracza::StartSprint);
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AParent_Gracza::StopSprint);
 	}
 }
 
-void ARPGPlayer::Move(const FInputActionValue& Value)
+void AParent_Gracza::Move(const FInputActionValue& Value)
 {
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
@@ -49,7 +58,7 @@ void ARPGPlayer::Move(const FInputActionValue& Value)
 	}
 }
 
-void ARPGPlayer::Look(const FInputActionValue& Value)
+void AParent_Gracza::Look(const FInputActionValue& Value)
 {
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
@@ -58,4 +67,14 @@ void ARPGPlayer::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void AParent_Gracza::StartSprint()
+{
+	GetCharacterMovement()->MaxWalkSpeed = SprintSpeed;
+}
+
+void AParent_Gracza::StopSprint()
+{
+	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 }
