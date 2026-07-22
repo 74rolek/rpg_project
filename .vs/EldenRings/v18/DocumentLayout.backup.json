@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "C:\\Projecty_Git_Hub\\RPG_PROJECT_UE5\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{475A36C4-BF6F-3A24-B56F-D918F3EA65E5}|Intermediate\\ProjectFiles\\EldenRings.vcxproj|C:\\Projecty_Git_Hub\\RPG_PROJECT_UE5\\Source\\EldenRings\\GameInstance_MOJ.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{475A36C4-BF6F-3A24-B56F-D918F3EA65E5}|Intermediate\\ProjectFiles\\EldenRings.vcxproj|solutionrelative:Source\\EldenRings\\GameInstance_MOJ.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{475A36C4-BF6F-3A24-B56F-D918F3EA65E5}|Intermediate\\ProjectFiles\\EldenRings.vcxproj|C:\\Projecty_Git_Hub\\RPG_PROJECT_UE5\\Source\\EldenRings\\GameInstance_MOJ.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{475A36C4-BF6F-3A24-B56F-D918F3EA65E5}|Intermediate\\ProjectFiles\\EldenRings.vcxproj|solutionrelative:Source\\EldenRings\\GameInstance_MOJ.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{475A36C4-BF6F-3A24-B56F-D918F3EA65E5}|Intermediate\\ProjectFiles\\EldenRings.vcxproj|C:\\Projecty_Git_Hub\\RPG_PROJECT_UE5\\Source\\EldenRings\\Parent_Gracza.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{475A36C4-BF6F-3A24-B56F-D918F3EA65E5}|Intermediate\\ProjectFiles\\EldenRings.vcxproj|solutionrelative:Source\\EldenRings\\Parent_Gracza.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
@@ -22,25 +30,50 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "Parent_Gracza.cpp",
               "DocumentMoniker": "C:\\Projecty_Git_Hub\\RPG_PROJECT_UE5\\Source\\EldenRings\\Parent_Gracza.cpp",
               "RelativeDocumentMoniker": "Source\\EldenRings\\Parent_Gracza.cpp",
               "ToolTip": "C:\\Projecty_Git_Hub\\RPG_PROJECT_UE5\\Source\\EldenRings\\Parent_Gracza.cpp",
               "RelativeToolTip": "Source\\EldenRings\\Parent_Gracza.cpp",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAwwE8AAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAEUAAAAAAAAAAAAAAE8AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-07-20T19:27:51.404Z",
-              "IsPinned": true,
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "GameInstance_MOJ.cpp",
+              "DocumentMoniker": "C:\\Projecty_Git_Hub\\RPG_PROJECT_UE5\\Source\\EldenRings\\GameInstance_MOJ.cpp",
+              "RelativeDocumentMoniker": "Source\\EldenRings\\GameInstance_MOJ.cpp",
+              "ToolTip": "C:\\Projecty_Git_Hub\\RPG_PROJECT_UE5\\Source\\EldenRings\\GameInstance_MOJ.cpp",
+              "RelativeToolTip": "Source\\EldenRings\\GameInstance_MOJ.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-07-22T16:31:01.356Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
+              "Title": "GameInstance_MOJ.h",
+              "DocumentMoniker": "C:\\Projecty_Git_Hub\\RPG_PROJECT_UE5\\Source\\EldenRings\\GameInstance_MOJ.h",
+              "RelativeDocumentMoniker": "Source\\EldenRings\\GameInstance_MOJ.h",
+              "ToolTip": "C:\\Projecty_Git_Hub\\RPG_PROJECT_UE5\\Source\\EldenRings\\GameInstance_MOJ.h",
+              "RelativeToolTip": "Source\\EldenRings\\GameInstance_MOJ.h",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAkwA4AAABIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-07-22T16:31:01.179Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "EldenRings.Build.cs",
               "DocumentMoniker": "C:\\Projecty_Git_Hub\\RPG_PROJECT_UE5\\Source\\EldenRings\\EldenRings.Build.cs",
               "RelativeDocumentMoniker": "Source\\EldenRings\\EldenRings.Build.cs",
@@ -48,21 +81,19 @@
               "RelativeToolTip": "Source\\EldenRings\\EldenRings.Build.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAABzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-21T17:17:53.357Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-07-21T17:17:53.357Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "Parent_Gracza.h",
               "DocumentMoniker": "C:\\Projecty_Git_Hub\\RPG_PROJECT_UE5\\Source\\EldenRings\\Parent_Gracza.h",
               "RelativeDocumentMoniker": "Source\\EldenRings\\Parent_Gracza.h",
-              "ToolTip": "C:\\Projecty_Git_Hub\\RPG_PROJECT_UE5\\Source\\EldenRings\\Parent_Gracza.h*",
-              "RelativeToolTip": "Source\\EldenRings\\Parent_Gracza.h*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAC4AAAACAAAAAAAAAA==",
+              "ToolTip": "C:\\Projecty_Git_Hub\\RPG_PROJECT_UE5\\Source\\EldenRings\\Parent_Gracza.h",
+              "RelativeToolTip": "Source\\EldenRings\\Parent_Gracza.h",
+              "ViewState": "AgIAACAAAAAAAAAAAAAIwBkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-07-20T19:25:20.912Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-07-20T19:25:20.912Z"
             }
           ]
         }
