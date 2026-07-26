@@ -38,7 +38,11 @@ public:
 	int Level = 1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statystyki")
+<<<<<<< HEAD
+	int AktualnyXP = 10000;
+=======
 	int AktualnyXP = 0;
+>>>>>>> origin/main
 
 	// Zdrowie
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statystyki")
