@@ -42,7 +42,7 @@ public:
 
 	// Zdrowie
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statystyki")
-	int HP = 100;
+	float HP = 100.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statystyki")
 	int Maksymalne_HP = 100;
@@ -121,6 +121,20 @@ public:
 
 
 	// --- FUNKCJE ---
+
+	UFUNCTION(BlueprintCallable, Category = "Walka")
+	void TakeDamageAdvanced(
+		float Fizyczne,
+		float Magiczne,
+		float Obrazajace,
+		float Ogniste,
+		float Zmarzniecie,
+		float Krwawienie,
+		float Zatrucie
+	);
+
+	UFUNCTION(BlueprintCallable, Category = "Statystyki")
+	int DajAtakPostaci();
 
 	UFUNCTION(BlueprintCallable, Category = "Statystyki")
 	void DodajXP(int Ilosc);

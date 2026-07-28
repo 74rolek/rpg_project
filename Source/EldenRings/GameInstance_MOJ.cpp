@@ -1,5 +1,58 @@
 #include "GameInstance_MOJ.h"
 
+void UGameInstance_MOJ::TakeDamageAdvanced(
+	float Fizyczne,
+	float Magiczne,
+	float Obrazajace,
+	float Ogniste,
+	float Zmarzniecie,
+	float Krwawienie,
+	float Zatrucie)
+{
+	// 1. Obliczanie redukcji obrażeń na podstawie odporności (w procentach 0-100%)
+	float RedukcjaFizyczna = FMath::Clamp(1.0f - (Odpornosc_Fizyczna / 100.0f), 0.0f, 1.0f);
+	float RedukcjaMagiczna = FMath::Clamp(1.0f - (Odpornosc_Magiczna / 100.0f), 0.0f, 1.0f);
+	float RedukcjaObrazajaca = FMath::Clamp(1.0f - (Odpornosc_Obrazajaca / 100.0f), 0.0f, 1.0f);
+	float RedukcjaOgnista = FMath::Clamp(1.0f - (Odpornosc_Ognista / 100.0f), 0.0f, 1.0f);
+	float RedukcjaZmarzniecie = FMath::Clamp(1.0f - (Odpornosc_Zmarzniecie / 100.0f), 0.0f, 1.0f);
+	float RedukcjaKrwawienie = FMath::Clamp(1.0f - (Odpornosc_Krwawienie / 100.0f), 0.0f, 1.0f);
+	float RedukcjaZatrucie = FMath::Clamp(1.0f - (Odpornosc_Zatrucie / 100.0f), 0.0f, 1.0f);
+
+	// 2. Sumowanie ostatecznych obrażeń po uwzględnieniu pancerza/odporności
+	float OstateczneObrazenia =
+		(Fizyczne * RedukcjaFizyczna) +
+		(Magiczne * RedukcjaMagiczna) +
+		(Obrazajace * RedukcjaObrazajaca) +
+		(Ogniste * RedukcjaOgnista) +
+		(Zmarzniecie * RedukcjaZmarzniecie) +
+		(Krwawienie * RedukcjaKrwawienie) +
+		(Zatrucie * RedukcjaZatrucie);
+
+	// 3. Odejmowanie od HP
+	HP -= OstateczneObrazenia;
+
+	UE_LOG(LogTemp, Warning, TEXT("Otrzymano obrażenia: %f | Pozostałe HP: %f"), OstateczneObrazenia, HP);
+
+	// 4. Sprawdzenie warunku śmierci (podobnie jak na Twoim schemacie w Blueprint)
+	if (HP <= 0.0f)
+	{
+		HP = 0.0f;
+
+		UE_LOG(LogTemp, Error, TEXT("You died"));
+
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("You died"));
+		}
+	}
+}
+
+int UGameInstance_MOJ::DajAtakPostaci()
+{
+	int FinalneObrazenia = Obrazenia_Fizyczne + (Zrecznosc * 3) + (Sila * 1);
+	return FinalneObrazenia;
+}
+
 void UGameInstance_MOJ::DodajXP(int Ilosc)
 {
 	AktualnyXP += Ilosc;
@@ -36,6 +89,11 @@ bool UGameInstance_MOJ::UlepszStatystykeSila()
 		PodniesLevel(1);
 		Sila++;
 		Obrazenia_Fizyczne += 2;
+
+		// Dodaje wytrzymałość przy ulepszaniu siły
+		Maksymalna_Wytzymalosc += 10;
+		Wytzymalosc = Maksymalna_Wytzymalosc;
+
 		return true;
 	}
 	return false;
