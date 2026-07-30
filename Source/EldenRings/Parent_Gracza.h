@@ -17,6 +17,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	// Funkcja Tick dodana do obsługi ciągłego zabierania staminy podczas sprintu
+	virtual void Tick(float DeltaTime) override;
+
 	// Obiekty sterowania w Unreal Engine
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	class UInputMappingContext* DefaultMappingContext;
@@ -30,6 +33,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	class UInputAction* SprintAction;
 
+	// Akcja skoku dodana do systemu sterowania
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* JumpAction;
+
 	// Funkcje poruszania się
 	void Move(const struct FInputActionValue& Value);
 	void Look(const struct FInputActionValue& Value);
@@ -37,6 +44,9 @@ protected:
 	// Funkcje sprintu
 	void StartSprint();
 	void StopSprint();
+
+	// Funkcja obsługująca skok ze sprawdzaniem staminy
+	void ZrobSkok();
 
 	// Prędkości poruszania się
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")

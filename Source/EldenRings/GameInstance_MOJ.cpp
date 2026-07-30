@@ -9,7 +9,6 @@ void UGameInstance_MOJ::TakeDamageAdvanced(
 	float Krwawienie,
 	float Zatrucie)
 {
-	// 1. Obliczanie redukcji obrażeń na podstawie odporności (w procentach 0-100%)
 	float RedukcjaFizyczna = FMath::Clamp(1.0f - (Odpornosc_Fizyczna / 100.0f), 0.0f, 1.0f);
 	float RedukcjaMagiczna = FMath::Clamp(1.0f - (Odpornosc_Magiczna / 100.0f), 0.0f, 1.0f);
 	float RedukcjaObrazajaca = FMath::Clamp(1.0f - (Odpornosc_Obrazajaca / 100.0f), 0.0f, 1.0f);
@@ -18,7 +17,6 @@ void UGameInstance_MOJ::TakeDamageAdvanced(
 	float RedukcjaKrwawienie = FMath::Clamp(1.0f - (Odpornosc_Krwawienie / 100.0f), 0.0f, 1.0f);
 	float RedukcjaZatrucie = FMath::Clamp(1.0f - (Odpornosc_Zatrucie / 100.0f), 0.0f, 1.0f);
 
-	// 2. Sumowanie ostatecznych obrażeń po uwzględnieniu pancerza/odporności
 	float OstateczneObrazenia =
 		(Fizyczne * RedukcjaFizyczna) +
 		(Magiczne * RedukcjaMagiczna) +
@@ -28,12 +26,10 @@ void UGameInstance_MOJ::TakeDamageAdvanced(
 		(Krwawienie * RedukcjaKrwawienie) +
 		(Zatrucie * RedukcjaZatrucie);
 
-	// 3. Odejmowanie od HP
 	HP -= OstateczneObrazenia;
 
 	UE_LOG(LogTemp, Warning, TEXT("Otrzymano obrażenia: %f | Pozostałe HP: %f"), OstateczneObrazenia, HP);
 
-	// 4. Sprawdzenie warunku śmierci (podobnie jak na Twoim schemacie w Blueprint)
 	if (HP <= 0.0f)
 	{
 		HP = 0.0f;
@@ -91,8 +87,8 @@ bool UGameInstance_MOJ::UlepszStatystykeSila()
 		Obrazenia_Fizyczne += 2;
 
 		// Dodaje wytrzymałość przy ulepszaniu siły
-		Maksymalna_Wytzymalosc += 10;
-		Wytzymalosc = Maksymalna_Wytzymalosc;
+		Maksymalna_Wytrzymalosc += 10;
+		Wytrzymalosc = Maksymalna_Wytrzymalosc;
 
 		return true;
 	}
@@ -176,3 +172,24 @@ bool UGameInstance_MOJ::UlepszStatystykePoise()
 	}
 	return false;
 }
+
+void UGameInstance_MOJ::Zabierz_stamine(int Ilosc_stamina, bool& Czy_zabralo_stamine)
+{
+	if (Wytrzymalosc > 0)
+	{
+		Wytrzymalosc = Wytrzymalosc - Ilosc_stamina;
+		Wytrzymalosc = FMath::Clamp(Wytrzymalosc, 0, Maksymalna_Wytrzymalosc);
+		Czy_zabralo_stamine = true;
+
+
+
+
+	}
+
+	else
+		Czy_zabralo_stamine = false;
+}
+
+
+
+

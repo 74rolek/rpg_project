@@ -56,10 +56,10 @@ public:
 
 	// Wytrzymałość
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statystyki")
-	int Wytzymalosc = 100;
+	int Wytrzymalosc = 100;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statystyki")
-	int Maksymalna_Wytzymalosc = 100;
+	int Maksymalna_Wytrzymalosc = 100;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statystyki")
 	int Regeneracja_Wytrzymalosci = 30;
@@ -165,4 +165,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Build_postaci")
 	bool UlepszStatystykePoise();
+
+	UFUNCTION(BlueprintCallable, Category = "Build_postaci")
+	void Zabierz_stamine(int Ilosc_stamina,bool& Czy_zabralo_stamine );
 };
