@@ -167,5 +167,11 @@ public:
 	bool UlepszStatystykePoise();
 
 	UFUNCTION(BlueprintCallable, Category = "Build_postaci")
-	void Zabierz_stamine(int Ilosc_stamina,bool& Czy_zabralo_stamine );
+	void Zabierz_stamine(int Ilosc_stamina, bool& Czy_zabralo_stamine);
+
+	UFUNCTION(BlueprintCallable, Category = "Build_postaci")
+	void Regeneruj_Stamine(int Ilosc_stamina);
+
+	UFUNCTION(BlueprintCallable, Category = "Ognisko")
+	void Odpocznij_Przy_Ognisku();
 };

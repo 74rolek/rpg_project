@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/BoxComponent.h"
+#include "Blueprint/UserWidget.h"
 #include "Ognisko_Base.generated.h"
 
 UCLASS()
@@ -21,6 +22,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Ognisko")
 	UBoxComponent* StrefaInterakcji;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Ognisko")
+	TSubclassOf<UUserWidget> UlepszeniePostaciWidgetClass;
+
+	UPROPERTY()
+	UUserWidget* UlepszeniePostaciWidgetInstance;
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Ognisko")
 	bool bCzyGraczWStrefie = false;

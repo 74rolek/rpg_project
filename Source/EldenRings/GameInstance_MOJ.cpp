@@ -177,19 +177,26 @@ void UGameInstance_MOJ::Zabierz_stamine(int Ilosc_stamina, bool& Czy_zabralo_sta
 {
 	if (Wytrzymalosc > 0)
 	{
-		Wytrzymalosc = Wytrzymalosc - Ilosc_stamina;
-		Wytrzymalosc = FMath::Clamp(Wytrzymalosc, 0, Maksymalna_Wytrzymalosc);
+		Wytrzymalosc = FMath::Clamp(Wytrzymalosc - Ilosc_stamina, 0, Maksymalna_Wytrzymalosc);
 		Czy_zabralo_stamine = true;
-
-
-
-
 	}
-
 	else
+	{
 		Czy_zabralo_stamine = false;
+	}
 }
 
+void UGameInstance_MOJ::Regeneruj_Stamine(int Ilosc_stamina)
+{
+	if (Wytrzymalosc < Maksymalna_Wytrzymalosc)
+	{
+		Wytrzymalosc = FMath::Clamp(Wytrzymalosc + Ilosc_stamina, 0, Maksymalna_Wytrzymalosc);
+	}
+}
 
-
-
+void UGameInstance_MOJ::Odpocznij_Przy_Ognisku()
+{
+	HP = Maksymalne_HP;
+	Wytrzymalosc = Maksymalna_Wytrzymalosc;
+	Statystyka_Mana = Maksymalna_Mana;
+}

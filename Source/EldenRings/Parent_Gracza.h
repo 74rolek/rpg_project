@@ -54,4 +54,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float SprintSpeed = 1200.0f;
+
+	// Akumulatory dla płynnego odejmowania i regeneracji staminy
+	float SprintStaminaAccumulator = 0.0f;
+	float RegenStaminaAccumulator = 0.0f;
 };

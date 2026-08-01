@@ -3,11 +3,10 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "GameInstance_MOJ.h" // Załączenie nagłówka Twojego GameInstance
+#include "GameInstance_MOJ.h"
 
 AParent_Gracza::AParent_Gracza()
 {
-	// Włączenie funkcji Tick dla tej postaci
 	PrimaryActorTick.bCanEverTick = true;
 }
 
@@ -23,7 +22,6 @@ void AParent_Gracza::BeginPlay()
 		}
 	}
 
-	// Ustawienie domyślnej prędkości na chodzenie
 	if (GetCharacterMovement())
 	{
 		GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
@@ -34,23 +32,35 @@ void AParent_Gracza::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// --- OBSŁUGA KONSUMPCJI STAMINY PODCZAS SPRINTU ---
-	// Sprawdzamy czy postać aktualnie biegnie oraz czy faktycznie porusza się po ziemi (Velocity > 0)
-	if (GetCharacterMovement() && GetCharacterMovement()->MaxWalkSpeed == SprintSpeed && GetVelocity().Size2D() > 0.0f)
+	if (UGameInstance_MOJ* GI = Cast<UGameInstance_MOJ>(GetGameInstance()))
 	{
-		if (UGameInstance_MOJ* GI = Cast<UGameInstance_MOJ>(GetGameInstance()))
+		bool bIsSprinting = GetCharacterMovement() && GetCharacterMovement()->MaxWalkSpeed == SprintSpeed && GetVelocity().Size2D() > 0.0f;
+
+		if (bIsSprinting)
 		{
 			bool bUdaloSieZabrac = false;
-
-			// Koszt sprintu na sekundę (np. 25 punktów staminy pomnożone przez DeltaTime)
 			int KosztSprintu = FMath::RoundToInt(25.0f * DeltaTime);
 
 			GI->Zabierz_stamine(KosztSprintu, bUdaloSieZabrac);
 
-			// Jeśli skończyła się stamina lub nie udało się jej pobrać, zatrzymaj sprint
 			if (!bUdaloSieZabrac || GI->Wytrzymalosc <= 0)
 			{
 				StopSprint();
+			}
+		}
+		else
+		{
+			if (GI->Wytrzymalosc < GI->Maksymalna_Wytrzymalosc)
+			{
+				int SzybkoscRegeneracji = GI->Regeneracja_Wytrzymalosci > 0 ? GI->Regeneracja_Wytrzymalosci : 10;
+				int IloscRegeneracji = FMath::RoundToInt(static_cast<float>(SzybkoscRegeneracji) * DeltaTime);
+
+				if (IloscRegeneracji == 0)
+				{
+					IloscRegeneracji = 1;
+				}
+
+				GI->Regeneruj_Stamine(IloscRegeneracji);
 			}
 		}
 	}
@@ -62,15 +72,10 @@ void AParent_Gracza::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-		// Podpięcie ruchu i myszki
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AParent_Gracza::Move);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AParent_Gracza::Look);
-
-		// Podpięcie sprintu (naciśnięcie i puszczenie Shift)
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &AParent_Gracza::StartSprint);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AParent_Gracza::StopSprint);
-
-		// Podpięcie nowej akcji skoku ze staminą
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &AParent_Gracza::ZrobSkok);
 	}
 }
@@ -107,7 +112,6 @@ void AParent_Gracza::StartSprint()
 {
 	if (UGameInstance_MOJ* GI = Cast<UGameInstance_MOJ>(GetGameInstance()))
 	{
-		// Nie pozwól zacząć sprintu, jeśli gracz nie ma staminy
 		if (GI->Wytrzymalosc > 0)
 		{
 			if (GetCharacterMovement())
@@ -131,11 +135,10 @@ void AParent_Gracza::ZrobSkok()
 	if (UGameInstance_MOJ* GI = Cast<UGameInstance_MOJ>(GetGameInstance()))
 	{
 		bool bUdaloSieZabrac = false;
-		int KosztSkoku = 15; // Stały koszt staminy za jeden skok
+		int KosztSkoku = 15;
 
 		GI->Zabierz_stamine(KosztSkoku, bUdaloSieZabrac);
 
-		// Skaczemy tylko wtedy, kiedy funkcja w GameInstance potwierdziła zabranie staminy
 		if (bUdaloSieZabrac)
 		{
 			Jump();
