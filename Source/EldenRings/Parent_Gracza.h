@@ -2,7 +2,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "HUDInteractionInterface.h"
 #include "Parent_Gracza.generated.h"
+
+class AOgnisko_Base;
 
 UCLASS()
 class ELDENRINGS_API AParent_Gracza : public ACharacter
@@ -13,6 +16,18 @@ public:
 	AParent_Gracza();
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UFUNCTION(BlueprintCallable, Category = "Interaction")
+	bool CzyJestPrzyOgnisku() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Interaction")
+	void OpenUpgradePanel();
+
+	UFUNCTION(BlueprintCallable, Category = "Interaction")
+	void CloseUpgradePanel();
+
+	void SetNearbyCampfire(AOgnisko_Base* Campfire);
+	void ClearNearbyCampfire(AOgnisko_Base* Campfire);
 
 protected:
 	virtual void BeginPlay() override;
@@ -33,6 +48,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	class UInputAction* SprintAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* InteractAction;
+
 	// Akcja skoku dodana do systemu sterowania
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	class UInputAction* JumpAction;
@@ -40,6 +58,7 @@ protected:
 	// Funkcje poruszania się
 	void Move(const struct FInputActionValue& Value);
 	void Look(const struct FInputActionValue& Value);
+	void InteractPressed();
 
 	// Funkcje sprintu
 	void StartSprint();
@@ -47,6 +66,9 @@ protected:
 
 	// Funkcja obsługująca skok ze sprawdzaniem staminy
 	void ZrobSkok();
+
+	UFUNCTION(BlueprintCallable, Category = "Interaction")
+	void TryInteract();
 
 	// Prędkości poruszania się
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
@@ -58,4 +80,7 @@ protected:
 	// Akumulatory dla płynnego odejmowania i regeneracji staminy
 	float SprintStaminaAccumulator = 0.0f;
 	float RegenStaminaAccumulator = 0.0f;
+
+private:
+	TWeakObjectPtr<AOgnisko_Base> NearbyCampfire;
 };

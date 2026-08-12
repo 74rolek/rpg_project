@@ -4,6 +4,9 @@
 #include "InputActionValue.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameInstance_MOJ.h"
+#include "Ognisko_Base.h"
+#include "Interactable.h"
+#include "HUDInteractionInterface.h"
 
 AParent_Gracza::AParent_Gracza()
 {
@@ -76,8 +79,79 @@ void AParent_Gracza::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AParent_Gracza::Look);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &AParent_Gracza::StartSprint);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AParent_Gracza::StopSprint);
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &AParent_Gracza::InteractPressed);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &AParent_Gracza::ZrobSkok);
 	}
+}
+
+bool AParent_Gracza::CzyJestPrzyOgnisku() const
+{
+	return NearbyCampfire.IsValid();
+}
+
+void AParent_Gracza::SetNearbyCampfire(AOgnisko_Base* Campfire)
+{
+	NearbyCampfire = Campfire;
+}
+
+void AParent_Gracza::ClearNearbyCampfire(AOgnisko_Base* Campfire)
+{
+	if (NearbyCampfire == Campfire)
+	{
+		NearbyCampfire = nullptr;
+	}
+}
+
+void AParent_Gracza::InteractPressed()
+{
+	TryInteract();
+}
+
+void AParent_Gracza::TryInteract()
+{
+	if (!NearbyCampfire.IsValid())
+	{
+		return;
+	}
+
+	if (IInteractable* Interactable = Cast<IInteractable>(NearbyCampfire.Get()))
+	{
+		Interactable->Execute_Interact(NearbyCampfire.Get(), this);
+	}
+}
+
+void AParent_Gracza::OpenUpgradePanel()
+{
+	APlayerController* PC = Cast<APlayerController>(GetController());
+	if (!PC)
+	{
+		return;
+	}
+
+	APlayerHUD* HUD = PC->GetHUD();
+	if (HUD && IHUDInteractionInterface::Execute_ShowUpgradeWidget(HUD, this))
+	{
+		return;
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("OpenUpgradePanel: HUD does not implement IHUDInteractionInterface"));
+}
+
+void AParent_Gracza::CloseUpgradePanel()
+{
+	APlayerController* PC = Cast<APlayerController>(GetController());
+	if (!PC)
+	{
+		return;
+	}
+
+	APlayerHUD* HUD = PC->GetHUD();
+	if (HUD && IHUDInteractionInterface::Execute_HideUpgradeWidget(HUD, this))
+	{
+		return;
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("CloseUpgradePanel: HUD does not implement IHUDInteractionInterface"));
 }
 
 void AParent_Gracza::Move(const FInputActionValue& Value)
