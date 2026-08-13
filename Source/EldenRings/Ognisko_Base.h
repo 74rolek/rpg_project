@@ -5,10 +5,11 @@
 #include "Components/BoxComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "Interactable.h"
+#include "SelectionInteractableInterface.h"
 #include "Ognisko_Base.generated.h"
 
 UCLASS()
-class ELDENRINGS_API AOgnisko_Base : public AActor, public IInteractable
+class ELDENRINGS_API AOgnisko_Base : public AActor, public IInteractable, public ISelectionInteractable
 {
 	GENERATED_BODY()
 
@@ -36,6 +37,9 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Ognisko")
 	bool bMenuOtworzone = false;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Interaction")
+	bool bJestWybrany = false;
+
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
@@ -56,4 +60,5 @@ public:
 	bool CzyMoznaOtworzycMenu() const { return bCzyGraczWStrefie; }
 
 	virtual void Interact_Implementation(AActor* Interactor) override;
+	virtual void SetSelected_Implementation(bool bIsSelected) override;
 };

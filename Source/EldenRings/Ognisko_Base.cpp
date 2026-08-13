@@ -14,6 +14,16 @@ void AOgnisko_Base::Interact_Implementation(AActor* Interactor)
 	Player->OpenUpgradePanel();
 }
 
+void AOgnisko_Base::SetSelected_Implementation(bool bIsSelected)
+{
+	bJestWybrany = bIsSelected;
+
+	if (!bIsSelected && bMenuOtworzone)
+	{
+		CloseUpgradeWidget();
+	}
+}
+
 AOgnisko_Base::AOgnisko_Base()
 {
 	PrimaryActorTick.bCanEverTick = false;

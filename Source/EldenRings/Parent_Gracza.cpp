@@ -7,6 +7,7 @@
 #include "Ognisko_Base.h"
 #include "Interactable.h"
 #include "HUDInteractionInterface.h"
+#include "SelectionInteractableInterface.h"
 
 AParent_Gracza::AParent_Gracza()
 {
@@ -86,19 +87,147 @@ void AParent_Gracza::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 bool AParent_Gracza::CzyJestPrzyOgnisku() const
 {
-	return NearbyCampfire.IsValid();
+	return GetBestNearbyCampfire() != nullptr;
+}
+
+AOgnisko_Base* AParent_Gracza::GetBestNearbyCampfire() const
+{
+	AOgnisko_Base* BestCampfire = nullptr;
+	float BestDistanceSquared = TNumericLimits<float>::Max();
+
+	TArray<AOgnisko_Base*> FrontCampfires;
+	for (const TWeakObjectPtr<AOgnisko_Base>& Campfire : NearbyCampfires)
+	{
+		AOgnisko_Base* CampfireActor = Campfire.Get();
+		if (!CampfireActor)
+		{
+			continue;
+		}
+
+		const float DistanceSquared = (CampfireActor->GetActorLocation() - GetActorLocation()).SizeSquared();
+		if (DistanceSquared < BestDistanceSquared)
+		{
+			BestDistanceSquared = DistanceSquared;
+			BestCampfire = CampfireActor;
+		}
+
+		if (IsCampfireInFrontOfCamera(CampfireActor))
+		{
+			FrontCampfires.Add(CampfireActor);
+		}
+	}
+
+	if (FrontCampfires.Num() > 0)
+	{
+		AOgnisko_Base* BestFrontCampfire = nullptr;
+		float BestFrontDistanceSquared = TNumericLimits<float>::Max();
+
+		for (AOgnisko_Base* Campfire : FrontCampfires)
+		{
+			if (!Campfire)
+			{
+				continue;
+			}
+
+			const float DistanceSquared = (Campfire->GetActorLocation() - GetActorLocation()).SizeSquared();
+			if (DistanceSquared < BestFrontDistanceSquared)
+			{
+				BestFrontDistanceSquared = DistanceSquared;
+				BestFrontCampfire = Campfire;
+			}
+		}
+
+		return BestFrontCampfire;
+	}
+
+	return BestCampfire;
+}
+
+bool AParent_Gracza::IsCampfireInFrontOfCamera(const AActor* Campfire) const
+{
+	if (!Campfire)
+	{
+		return false;
+	}
+
+	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	if (!PlayerController)
+	{
+		return true;
+	}
+
+	const FVector CameraForward = PlayerController->PlayerCameraManager
+		? PlayerController->PlayerCameraManager->GetCameraRotation().Vector()
+		: GetControlRotation().Vector();
+	const FVector ToCampfire = (Campfire->GetActorLocation() - GetActorLocation()).GetSafeNormal();
+	return FVector::DotProduct(CameraForward, ToCampfire) > 0.0f;
 }
 
 void AParent_Gracza::SetNearbyCampfire(AOgnisko_Base* Campfire)
 {
-	NearbyCampfire = Campfire;
+	if (!Campfire)
+	{
+		return;
+	}
+
+	for (const TWeakObjectPtr<AOgnisko_Base>& ExistingCampfire : NearbyCampfires)
+	{
+		if (ExistingCampfire.Get() == Campfire)
+		{
+			return;
+		}
+	}
+
+	NearbyCampfires.Add(Campfire);
+	UpdateSelectedCampfire();
 }
 
 void AParent_Gracza::ClearNearbyCampfire(AOgnisko_Base* Campfire)
 {
-	if (NearbyCampfire == Campfire)
+	for (int32 Index = NearbyCampfires.Num() - 1; Index >= 0; --Index)
 	{
-		NearbyCampfire = nullptr;
+		if (NearbyCampfires[Index].Get() == Campfire)
+		{
+			NearbyCampfires.RemoveAt(Index);
+		}
+	}
+
+	if (SelectedCampfire == Campfire)
+	{
+		SelectedCampfire = nullptr;
+		if (ISelectionInteractable* SelectedInteractable = Cast<ISelectionInteractable>(Campfire))
+		{
+			SelectedInteractable->Execute_SetSelected(Campfire, false);
+		}
+	}
+
+	UpdateSelectedCampfire();
+}
+
+void AParent_Gracza::UpdateSelectedCampfire()
+{
+	AOgnisko_Base* NewSelectedCampfire = GetBestNearbyCampfire();
+	if (NewSelectedCampfire == SelectedCampfire.Get())
+	{
+		return;
+	}
+
+	if (SelectedCampfire.IsValid())
+	{
+		if (ISelectionInteractable* PreviousInteractable = Cast<ISelectionInteractable>(SelectedCampfire.Get()))
+		{
+			PreviousInteractable->Execute_SetSelected(SelectedCampfire.Get(), false);
+		}
+	}
+
+	SelectedCampfire = NewSelectedCampfire;
+
+	if (SelectedCampfire.IsValid())
+	{
+		if (ISelectionInteractable* NewInteractable = Cast<ISelectionInteractable>(SelectedCampfire.Get()))
+		{
+			NewInteractable->Execute_SetSelected(SelectedCampfire.Get(), true);
+		}
 	}
 }
 
@@ -109,14 +238,15 @@ void AParent_Gracza::InteractPressed()
 
 void AParent_Gracza::TryInteract()
 {
-	if (!NearbyCampfire.IsValid())
+	AOgnisko_Base* CampfireToUse = GetBestNearbyCampfire();
+	if (!CampfireToUse)
 	{
 		return;
 	}
 
-	if (IInteractable* Interactable = Cast<IInteractable>(NearbyCampfire.Get()))
+	if (IInteractable* Interactable = Cast<IInteractable>(CampfireToUse))
 	{
-		Interactable->Execute_Interact(NearbyCampfire.Get(), this);
+		Interactable->Execute_Interact(CampfireToUse, this);
 	}
 }
 
@@ -128,11 +258,8 @@ void AParent_Gracza::OpenUpgradePanel()
 		return;
 	}
 
-	APlayerHUD* HUD = PC->GetHUD();
-	if (HUD && IHUDInteractionInterface::Execute_ShowUpgradeWidget(HUD, this))
-	{
-		return;
-	}
+	
+	
 
 	UE_LOG(LogTemp, Warning, TEXT("OpenUpgradePanel: HUD does not implement IHUDInteractionInterface"));
 }
@@ -145,11 +272,8 @@ void AParent_Gracza::CloseUpgradePanel()
 		return;
 	}
 
-	APlayerHUD* HUD = PC->GetHUD();
-	if (HUD && IHUDInteractionInterface::Execute_HideUpgradeWidget(HUD, this))
-	{
-		return;
-	}
+	
+	
 
 	UE_LOG(LogTemp, Warning, TEXT("CloseUpgradePanel: HUD does not implement IHUDInteractionInterface"));
 }

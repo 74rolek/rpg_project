@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "HUDInteractionInterface.h"
+#include "SelectionInteractableInterface.h"
 #include "Parent_Gracza.generated.h"
 
 class AOgnisko_Base;
@@ -19,6 +20,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Interaction")
 	bool CzyJestPrzyOgnisku() const;
+
+	AOgnisko_Base* GetBestNearbyCampfire() const;
+	bool IsCampfireInFrontOfCamera(const AActor* Campfire) const;
+	void UpdateSelectedCampfire();
 
 	UFUNCTION(BlueprintCallable, Category = "Interaction")
 	void OpenUpgradePanel();
@@ -82,5 +87,6 @@ protected:
 	float RegenStaminaAccumulator = 0.0f;
 
 private:
-	TWeakObjectPtr<AOgnisko_Base> NearbyCampfire;
+	TArray<TWeakObjectPtr<AOgnisko_Base>> NearbyCampfires;
+	TWeakObjectPtr<AOgnisko_Base> SelectedCampfire;
 };
