@@ -11,6 +11,9 @@ class ELDENRINGS_API UGameInstance_MOJ : public UGameInstance
 
 public:
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Odporności")
+	bool GodMode = false;
+
 	// --- BUILD POSTACI ---
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Build_postaci")
@@ -94,6 +97,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Obrażenia")
 	int Obrazenia_Zatrucie = 0;
+
 
 
 	// --- ODPORNOŚCI ---

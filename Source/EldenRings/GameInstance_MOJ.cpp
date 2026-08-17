@@ -26,7 +26,12 @@ void UGameInstance_MOJ::TakeDamageAdvanced(
 		(Krwawienie * RedukcjaKrwawienie) +
 		(Zatrucie * RedukcjaZatrucie);
 
-	HP -= OstateczneObrazenia;
+	if (!GodMode)
+	{
+		HP -= OstateczneObrazenia;
+	}
+
+	
 
 	UE_LOG(LogTemp, Warning, TEXT("Otrzymano obrażenia: %f | Pozostałe HP: %f"), OstateczneObrazenia, HP);
 
@@ -53,7 +58,7 @@ void UGameInstance_MOJ::DodajXP(int Ilosc)
 {
 	AktualnyXP += Ilosc;
 
-	// Wypisze informację w konsoli Output Log w Unrealu
+
 	UE_LOG(LogTemp, Warning, TEXT("==== DODANO XP: %d | AKTUALNY XP W GAMEINSTANCE: %d ===="), Ilosc, AktualnyXP);
 }
 
