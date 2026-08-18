@@ -141,7 +141,6 @@ bool UGameInstance_MOJ::UlepszStatystykeMana()
 		PodniesLevel(1);
 		Mana++;
 		Maksymalna_Mana += 15;
-		Statystyka_Mana = Maksymalna_Mana;
 		return true;
 	}
 	return false;
@@ -156,6 +155,7 @@ bool UGameInstance_MOJ::UlepszStatystykeInteligencja()
 		AktualnyXP -= WymaganyXP;
 		PodniesLevel(1);
 		Inteligencja++;
+		Maksymalna_Mana += 6;
 		Obrazenia_Magiczne += 3;
 		return true;
 	}
@@ -203,5 +203,5 @@ void UGameInstance_MOJ::Odpocznij_Przy_Ognisku()
 {
 	HP = Maksymalne_HP;
 	Wytrzymalosc = Maksymalna_Wytrzymalosc;
-	Statystyka_Mana = Maksymalna_Mana;
+	Mana = Maksymalna_Mana;
 }

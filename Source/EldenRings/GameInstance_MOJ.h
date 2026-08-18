@@ -50,9 +50,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statystyki")
 	int Maksymalne_HP = 100;
 
-	// Mana
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statystyki")
-	int Statystyka_Mana = 50;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statystyki")
 	int Maksymalna_Mana = 50;
