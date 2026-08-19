@@ -43,19 +43,24 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statystyki")
 	int AktualnyXP = 0;
 
-	// Zdrowie
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statystyki")
 	float HP = 100.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statystyki")
 	int Maksymalne_HP = 100;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statystyki")
+	float SzybkoscAtaku = 15.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statystyki")
+	float NormalnaSzybkoscAtaku = 15.f;
+
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statystyki")
 	int Maksymalna_Mana = 50;
 
-	// Wytrzymałość
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statystyki")
 	int Wytrzymalosc = 100;
 
@@ -65,7 +70,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statystyki")
 	int Regeneracja_Wytrzymalosci = 30;
 
-	// Poise (Równowaga)
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statystyki")
 	int Poise = 30;
 
@@ -159,8 +164,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Build_postaci")
 	bool UlepszStatystykeZrecznosc();
 
+	
+
 	UFUNCTION(BlueprintCallable, Category = "Build_postaci")
-	bool UlepszStatystykeMana();
+	int WyliczWartoscStatystyki(float Baza, int PoziomStatystyki, float ParametrA, float ParametrB);
 
 	UFUNCTION(BlueprintCallable, Category = "Build_postaci")
 	bool UlepszStatystykeInteligencja();

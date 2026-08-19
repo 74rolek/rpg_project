@@ -343,3 +343,7 @@ void AParent_Gracza::ZrobSkok()
 		}
 	}
 }
+
+
+
+

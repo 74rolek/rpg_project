@@ -80,6 +80,18 @@ void UGameInstance_MOJ::PodniesLevel(int Ilosc)
 	Level += Ilosc;
 }
 
+
+
+
+
+
+
+
+/// I  ///////////////////////////////////////////////////////////////
+/// V
+///ulepszenie statystyk
+
+
 bool UGameInstance_MOJ::UlepszStatystykeSila()
 {
 	int WymaganyXP = Daj_mi_wymagane_XP_do_ulepszenia_postaci();
@@ -89,10 +101,10 @@ bool UGameInstance_MOJ::UlepszStatystykeSila()
 		AktualnyXP -= WymaganyXP;
 		PodniesLevel(1);
 		Sila++;
-		Obrazenia_Fizyczne += 2;
+		Obrazenia_Fizyczne = WyliczWartoscStatystyki(20, Sila, 4.7f, 0.1f);
 
-		// Dodaje wytrzymałość przy ulepszaniu siły
-		Maksymalna_Wytrzymalosc += 10;
+		
+		Maksymalna_Wytrzymalosc = WyliczWartoscStatystyki(39,Sila,5,0.7f );
 		Wytrzymalosc = Maksymalna_Wytrzymalosc;
 
 		return true;
@@ -109,7 +121,7 @@ bool UGameInstance_MOJ::UlepszStatystykeWitalnosc()
 		AktualnyXP -= WymaganyXP;
 		PodniesLevel(1);
 		Witalnosc++;
-		Maksymalne_HP += 25;
+		Maksymalne_HP = WyliczWartoscStatystyki(230, Witalnosc, 5.1f,0.9f);
 		HP = Maksymalne_HP;
 		return true;
 	}
@@ -125,22 +137,9 @@ bool UGameInstance_MOJ::UlepszStatystykeZrecznosc()
 		AktualnyXP -= WymaganyXP;
 		PodniesLevel(1);
 		Zrecznosc++;
-		Obrazenia_Fizyczne += 1;
-		return true;
-	}
-	return false;
-}
 
-bool UGameInstance_MOJ::UlepszStatystykeMana()
-{
-	int WymaganyXP = Daj_mi_wymagane_XP_do_ulepszenia_postaci();
+		SzybkoscAtaku = WyliczWartoscStatystyki(15,Zrecznosc,1,0.1f);
 
-	if (AktualnyXP >= WymaganyXP)
-	{
-		AktualnyXP -= WymaganyXP;
-		PodniesLevel(1);
-		Mana++;
-		Maksymalna_Mana += 15;
 		return true;
 	}
 	return false;
@@ -155,12 +154,16 @@ bool UGameInstance_MOJ::UlepszStatystykeInteligencja()
 		AktualnyXP -= WymaganyXP;
 		PodniesLevel(1);
 		Inteligencja++;
-		Maksymalna_Mana += 6;
-		Obrazenia_Magiczne += 3;
+		Maksymalna_Mana = WyliczWartoscStatystyki(50, Inteligencja, 4, 0.9f);
+		Obrazenia_Magiczne = WyliczWartoscStatystyki(20, Inteligencja, 10, 0.2f);
 		return true;
 	}
 	return false;
 }
+
+
+
+
 
 bool UGameInstance_MOJ::UlepszStatystykePoise()
 {
@@ -171,12 +174,21 @@ bool UGameInstance_MOJ::UlepszStatystykePoise()
 		AktualnyXP -= WymaganyXP;
 		PodniesLevel(1);
 		Poise_Build++;
-		Maksymalne_Poise += 5;
+		Maksymalne_Poise = WyliczWartoscStatystyki(50, Poise_Build, 4, 0.09f);
 		Poise = Maksymalne_Poise;
 		return true;
 	}
 	return false;
 }
+
+///////////////////////////////////////////////////////////
+
+
+
+
+
+
+
 
 void UGameInstance_MOJ::Zabierz_stamine(int Ilosc_stamina, bool& Czy_zabralo_stamine)
 {
@@ -205,3 +217,13 @@ void UGameInstance_MOJ::Odpocznij_Przy_Ognisku()
 	Wytrzymalosc = Maksymalna_Wytrzymalosc;
 	Mana = Maksymalna_Mana;
 }
+
+
+
+int UGameInstance_MOJ::WyliczWartoscStatystyki(float Baza, int PoziomStatystyki, float ParametrA, float ParametrB)
+{
+	
+	return FMath::RoundToInt(Baza + (PoziomStatystyki * ParametrA) + (FMath::Pow(static_cast<float>(PoziomStatystyki), 2.0f) * ParametrB));
+}
+
+
