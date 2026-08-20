@@ -218,6 +218,37 @@ void UGameInstance_MOJ::Odpocznij_Przy_Ognisku()
 	Mana = Maksymalna_Mana;
 }
 
+void UGameInstance_MOJ::Incjanizacja_wszystkiego()
+{
+
+		
+		Maksymalne_HP = WyliczWartoscStatystyki(230.0f, Witalnosc, 5.1f, 0.9f);
+		HP = Maksymalne_HP;
+
+		
+		Obrazenia_Fizyczne = WyliczWartoscStatystyki(20.0f, Sila, 4.7f, 0.1f);
+		Maksymalna_Wytrzymalosc = WyliczWartoscStatystyki(39.0f, Sila, 5.0f, 0.7f);
+		Wytrzymalosc = Maksymalna_Wytrzymalosc;
+
+		
+		SzybkoscAtaku = WyliczWartoscStatystyki(15.0f, Zrecznosc, 1.0f, 0.1f);
+		NormalnaSzybkoscAtaku = SzybkoscAtaku;
+
+		Maksymalna_Mana = WyliczWartoscStatystyki(50.0f, Inteligencja, 4.0f, 0.9f);
+		Mana = Maksymalna_Mana;
+		Obrazenia_Magiczne = WyliczWartoscStatystyki(20.0f, Inteligencja, 10.0f, 0.2f);
+
+		
+		Maksymalne_Poise = WyliczWartoscStatystyki(50.0f, Poise_Build, 4.0f, 0.09f);
+		Poise = Maksymalne_Poise;
+
+		UE_LOG(LogTemp, Log, TEXT("Zainicjalizowano statystyki postaci na poziomie %d."), Level);
+	
+
+
+
+}
+
 
 
 int UGameInstance_MOJ::WyliczWartoscStatystyki(float Baza, int PoziomStatystyki, float ParametrA, float ParametrB)

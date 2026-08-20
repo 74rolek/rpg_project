@@ -48,7 +48,7 @@ public:
 	float HP = 100.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statystyki")
-	int Maksymalne_HP = 100;
+	int Maksymalne_HP;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statystyki")
 	float SzybkoscAtaku = 15.f;
@@ -84,7 +84,7 @@ public:
 	int Obrazenia_Fizyczne = 10;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Obrażenia")
-	int Obrazenia_Magiczne = 0;
+	int Obrazenia_Magiczne;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Obrażenia")
 	int Obrazenia_Obrazajace = 0;
@@ -183,4 +183,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Ognisko")
 	void Odpocznij_Przy_Ognisku();
+
+
+	UFUNCTION(BlueprintCallable, Category = "Ognisko")
+	void Incjanizacja_wszystkiego();
+
+
 };
