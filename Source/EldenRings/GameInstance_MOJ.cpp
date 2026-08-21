@@ -102,6 +102,7 @@ bool UGameInstance_MOJ::UlepszStatystykeSila()
 		PodniesLevel(1);
 		Sila++;
 		Obrazenia_Fizyczne = WyliczWartoscStatystyki(20, Sila, 4.7f, 0.1f);
+		Odpornosc_Fizyczna = 1;
 
 		
 		Maksymalna_Wytrzymalosc = WyliczWartoscStatystyki(39,Sila,5,0.7f );
@@ -175,6 +176,7 @@ bool UGameInstance_MOJ::UlepszStatystykePoise()
 		PodniesLevel(1);
 		Poise_Build++;
 		Maksymalne_Poise = WyliczWartoscStatystyki(50, Poise_Build, 4, 0.09f);
+		Szansa_na_Obrazenia_Krytyczne = FMath::Loge(((3.0f + Poise_Build) / 3.0f) + 1.0f) / FMath::Loge(2.0f) * 20.0f - 20;
 		Poise = Maksymalne_Poise;
 		return true;
 	}

@@ -78,6 +78,11 @@ public:
 	int Maksymalne_Poise = 30;
 
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statystyki")
+	int Szansa_na_Obrazenia_Krytyczne = 30;
+
+
+
 	// --- OBRAŻENIA ---
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Obrażenia")
