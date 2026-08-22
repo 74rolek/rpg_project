@@ -193,5 +193,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Ognisko")
 	void Incjanizacja_wszystkiego();
 
+	UFUNCTION(BlueprintCallable, Category = "Statystyki")
+	int Wyliczanie_ulepszen_procentowych(float A, float Poziom_Statystyki, float B, float Baza, float C);
+
 
 };
