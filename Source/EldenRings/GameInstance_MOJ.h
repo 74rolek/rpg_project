@@ -17,22 +17,21 @@ public:
 	// --- BUILD POSTACI ---
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Build_postaci")
-	int Sila = 10;
+	int Sila = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Build_postaci")
-	int Witalnosc = 10;
+	int Witalnosc = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Build_postaci")
-	int Zrecznosc = 10;
+	int Zrecznosc = 0;
+
+	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Build_postaci")
-	int Mana = 10;
+	int Poise_Build = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Build_postaci")
-	int Poise_Build = 10;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Build_postaci")
-	int Inteligencja = 10;
+	int Inteligencja = 0;
 
 
 	// --- STATYSTYKI ---
@@ -42,6 +41,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statystyki")
 	int AktualnyXP = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Build_postaci")
+	int Mana = 10;
 
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statystyki")
@@ -111,25 +113,25 @@ public:
 	// --- ODPORNOŚCI ---
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Odporności")
-	int Odpornosc_Fizyczna = 0;
+float Odpornosc_Fizyczna = 0.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Odporności")
-	int Odpornosc_Magiczna = 0;
+	float Odpornosc_Magiczna = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Odporności")
-	int Odpornosc_Obrazajaca = 0;
+	float Odpornosc_Obrazajaca = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Odporności")
-	int Odpornosc_Ognista = 0;
+	float Odpornosc_Ognista = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Odporności")
-	int Odpornosc_Zmarzniecie = 0;
+	float Odpornosc_Zmarzniecie = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Odporności")
-	int Odpornosc_Krwawienie = 0;
+	float Odpornosc_Krwawienie = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Odporności")
-	int Odpornosc_Zatrucie = 0;
+	float Odpornosc_Zatrucie = 0;
 
 
 	// --- FUNKCJE ---
