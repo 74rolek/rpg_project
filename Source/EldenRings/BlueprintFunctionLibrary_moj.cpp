@@ -28,15 +28,10 @@ float UBlueprintFunctionLibrary_moj::WyliczFinalneObrazenia(
 		};
 
 
-	float BonusInteligencji = static_cast<float>(Inteligencja) * 2.0f;
-
-	float EfektywnaOdpornoscMagiczna = Odpornosc_Magiczna + BonusInteligencji;
-	float EfektywnaOdpornoscObrazajaca = Odpornosc_Obrazajaca + BonusInteligencji;
-
 	
 	float RedukcjaFizyczna = ObliczRedukcje(Odpornosc_Fizyczna);
-	float RedukcjaMagiczna = ObliczRedukcje(EfektywnaOdpornoscMagiczna);
-	float RedukcjaObrazajaca = ObliczRedukcje(EfektywnaOdpornoscObrazajaca);
+	float RedukcjaMagiczna = ObliczRedukcje(Odpornosc_Magiczna);
+	float RedukcjaObrazajaca = ObliczRedukcje(Odpornosc_Obrazajaca);
 	float RedukcjaOgnista = ObliczRedukcje(Odpornosc_Ognista);
 	float RedukcjaZmarzniecie = ObliczRedukcje(Odpornosc_Zmarzniecie);
 	float RedukcjaKrwawienie = ObliczRedukcje(Odpornosc_Krwawienie);
