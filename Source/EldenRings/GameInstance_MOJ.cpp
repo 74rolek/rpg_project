@@ -7,7 +7,10 @@ void UGameInstance_MOJ::TakeDamageAdvanced(
 	float Ogniste,
 	float Zmarzniecie,
 	float Krwawienie,
-	float Zatrucie)
+	float Zatrucie,
+	bool& czy_nie_zyje)
+
+
 {
 	float RedukcjaFizyczna = FMath::Clamp(1.0f - (Odpornosc_Fizyczna / 100.0f), 0.0f, 1.0f);
 	float RedukcjaMagiczna = FMath::Clamp(1.0f - (Odpornosc_Magiczna / 100.0f), 0.0f, 1.0f);
@@ -38,6 +41,7 @@ void UGameInstance_MOJ::TakeDamageAdvanced(
 	if (HP <= 0.0f)
 	{
 		HP = 0.0f;
+		czy_nie_zyje = true;
 
 		UE_LOG(LogTemp, Error, TEXT("You died"));
 
@@ -258,6 +262,11 @@ int UGameInstance_MOJ::Wyliczanie_ulepszen_procentowych(float A, float Poziom_St
 
 
 
+}
+
+int UGameInstance_MOJ::Respawn()
+{
+	return 0;
 }
 
 

@@ -144,7 +144,8 @@ float Odpornosc_Fizyczna = 0.f;
 		float Ogniste,
 		float Zmarzniecie,
 		float Krwawienie,
-		float Zatrucie
+		float Zatrucie,
+		bool &czy_nie_zyje
 	);
 
 	UFUNCTION(BlueprintCallable, Category = "Statystyki")
@@ -198,5 +199,6 @@ float Odpornosc_Fizyczna = 0.f;
 	UFUNCTION(BlueprintCallable, Category = "Statystyki")
 	int Wyliczanie_ulepszen_procentowych(float A, float Poziom_Statystyki, float B, float Baza, float C);
 
-
+	UFUNCTION(BlueprintCallable, Category = "Gracz")
+	int Respawn();
 };
