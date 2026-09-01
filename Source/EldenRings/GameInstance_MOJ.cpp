@@ -1,4 +1,6 @@
 #include "GameInstance_MOJ.h"
+#include "Kismet/GameplayStatics.h"
+
 
 void UGameInstance_MOJ::TakeDamageAdvanced(
 	float Fizyczne,
@@ -226,7 +228,7 @@ void UGameInstance_MOJ::Odpocznij_Przy_Ognisku()
 
 void UGameInstance_MOJ::Incjanizacja_wszystkiego()
 {
-
+	    PC = GetWorld()->GetFirstPlayerController();
 		
 		Maksymalne_HP = WyliczWartoscStatystyki(230.0f, Witalnosc, 5.1f, 0.9f);
 		HP = Maksymalne_HP;
@@ -264,10 +266,46 @@ int UGameInstance_MOJ::Wyliczanie_ulepszen_procentowych(float A, float Poziom_St
 
 }
 
-int UGameInstance_MOJ::Respawn()
+void UGameInstance_MOJ::Respawn()
 {
-	return 0;
+	
+	Pojaw_gracza();
+
+
 }
+
+void UGameInstance_MOJ::Pojaw_gracza()
+{
+	
+	HP = Maksymalne_HP;
+	Mana = Maksymalna_Mana;
+	Wytrzymalosc = Maksymalna_Wytrzymalosc;
+
+	if (PC)
+	{
+
+		PC->bShowMouseCursor = false;
+
+
+		FInputModeGameOnly InputMode;
+
+
+		InputMode.SetConsumeCaptureMouseDown(false);
+
+		PC->SetInputMode(InputMode);
+	}
+
+	UGameplayStatics::OpenLevel(GetWorld(), FName("Scena_Glowna"));
+}
+
+
+//---- SAVE GAME -----\\
+
+void UGameInstance_MOJ::SaveGame()
+{}
+
+
+
 
 
 

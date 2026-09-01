@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "Pojedynczy_save_1_postac.h"
 #include "GameInstance_MOJ.generated.h"
 
 UCLASS()
@@ -134,6 +135,10 @@ float Odpornosc_Fizyczna = 0.f;
 	float Odpornosc_Zatrucie = 0;
 
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Odporności")
+	APlayerController* PC;
+
+
 	// --- FUNKCJE ---
 
 	UFUNCTION(BlueprintCallable, Category = "Walka")
@@ -200,5 +205,15 @@ float Odpornosc_Fizyczna = 0.f;
 	int Wyliczanie_ulepszen_procentowych(float A, float Poziom_Statystyki, float B, float Baza, float C);
 
 	UFUNCTION(BlueprintCallable, Category = "Gracz")
-	int Respawn();
+	void Respawn();
+
+	UFUNCTION(BlueprintCallable, Category = "Gracz")
+	void Pojaw_gracza();
+
+	UFUNCTION(BlueprintCallable, Category = "SaveGame")
+	void SaveGame();
+
+
+
+
 };
