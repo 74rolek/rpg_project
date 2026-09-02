@@ -3,6 +3,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/HUD.h"
 #include "GameInstance_MOJ.h"
 #include "Ognisko_Base.h"
 #include "Interactable.h"
@@ -258,10 +259,11 @@ void AParent_Gracza::OpenUpgradePanel()
 		return;
 	}
 
-	
-	
-
-	UE_LOG(LogTemp, Warning, TEXT("OpenUpgradePanel: HUD does not implement IHUDInteractionInterface"));
+	AHUD* HUD = PC->GetHUD();
+	if (HUD)
+	{
+		IHUDInteractionInterface::Execute_ShowUpgradeWidget(HUD, this);
+	}
 }
 
 void AParent_Gracza::CloseUpgradePanel()
@@ -272,11 +274,13 @@ void AParent_Gracza::CloseUpgradePanel()
 		return;
 	}
 
-	
-	
-
-	UE_LOG(LogTemp, Warning, TEXT("CloseUpgradePanel: HUD does not implement IHUDInteractionInterface"));
+	AHUD* HUD = PC->GetHUD();
+	if (HUD)
+	{
+		IHUDInteractionInterface::Execute_HideUpgradeWidget(HUD, this);
+	}
 }
+
 
 void AParent_Gracza::Move(const FInputActionValue& Value)
 {
@@ -343,7 +347,3 @@ void AParent_Gracza::ZrobSkok()
 		}
 	}
 }
-
-
-
-

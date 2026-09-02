@@ -16,6 +16,12 @@ class ELDENRINGS_API AOgnisko_Base : public AActor, public IInteractable, public
 public:
 	AOgnisko_Base();
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Ognisko")
+	FString RowTable;
+
+	UFUNCTION(BlueprintPure, Category = "Ognisko")
+	FString PobierzRowTable() const { return RowTable; }
+
 protected:
 	virtual void BeginPlay() override;
 

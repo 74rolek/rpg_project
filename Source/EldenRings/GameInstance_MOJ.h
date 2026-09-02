@@ -138,6 +138,13 @@ float Odpornosc_Fizyczna = 0.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Odporności")
 	APlayerController* PC;
 
+	//UPROPERTY
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SAVE")
+	UPojedynczy_save_1_postac* As_Pojednynczy_save_1_postac;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Ognisko")
+	bool CzyGraczJestPrzyOgnisku = false;
+
 
 	// --- FUNKCJE ---
 
@@ -160,7 +167,7 @@ float Odpornosc_Fizyczna = 0.f;
 	void DodajXP(int Ilosc);
 
 	UFUNCTION(BlueprintCallable, Category = "Statystyki")
-	void Wyzeruj_XP();
+	void Zgub_XP();
 
 	UFUNCTION(BlueprintCallable, Category = "Statystyki")
 	int Daj_mi_wymagane_XP_do_ulepszenia_postaci();
@@ -195,7 +202,7 @@ float Odpornosc_Fizyczna = 0.f;
 	void Regeneruj_Stamine(int Ilosc_stamina);
 
 	UFUNCTION(BlueprintCallable, Category = "Ognisko")
-	void Odpocznij_Przy_Ognisku();
+	void Odpocznij_Przy_Ognisku(FString RowOgniska);
 
 
 	UFUNCTION(BlueprintCallable, Category = "Ognisko")
@@ -211,8 +218,42 @@ float Odpornosc_Fizyczna = 0.f;
 	void Pojaw_gracza();
 
 	UFUNCTION(BlueprintCallable, Category = "SaveGame")
-	void SaveGame();
+	void SaveGame(FString Nazwa_save);
 
+	UFUNCTION(BlueprintCallable, Category = "SaveGame")
+	void Przeladuj_swiat();
+
+	UFUNCTION(BlueprintCallable, Category = "Ognisko")
+	void UstawGraczaPrzyOgnisku(bool bJestPrzyOgnisku) { CzyGraczJestPrzyOgnisku = bJestPrzyOgnisku; }
+
+	UFUNCTION(BlueprintCallable, Category = "SaveGame")
+	void ZapiszPokonanegoSpecjalnegoMoba(const FString& Identyfikator);
+
+	UFUNCTION(BlueprintPure, Category = "SaveGame")
+	bool CzySpecjalnyMobJestPokonany(const FString& Identyfikator) const;
+
+	UFUNCTION(BlueprintCallable, Category = "SaveGame")
+	void ZapiszPokonanegoBossa(const FString& Identyfikator);
+
+	UFUNCTION(BlueprintPure, Category = "SaveGame")
+	bool CzyBossJestPokonany(const FString& Identyfikator) const;
+
+	UFUNCTION(BlueprintCallable, Category = "SaveGame")
+	void ZapiszOtwartaSkrzynke(const FString& Identyfikator);
+
+	UFUNCTION(BlueprintPure, Category = "SaveGame")
+	bool CzySkrzynkaJestOtwarta(const FString& Identyfikator) const;
+
+	UFUNCTION(BlueprintCallable, Category = "SaveGame")
+	void ZapiszOdkryteOgnisko(const FString& Identyfikator);
+
+	UFUNCTION(BlueprintPure, Category = "SaveGame")
+	bool CzyOgniskoJestOdkryte(const FString& Identyfikator) const;
+
+private:
+	void PrzeliczStatystyki(bool bPelneZasoby);
+	void WczytajGre(const FString& NazwaSave);
+	void TeleportujDoOstatniegoOgniska();
 
 
 

@@ -1,6 +1,16 @@
 #include "GameInstance_MOJ.h"
 #include "Kismet/GameplayStatics.h"
+#include "Ognisko_Base.h"
+#include "EngineUtils.h"
 
+// I N C J A L I Z A C J A
+void UGameInstance_MOJ::Incjanizacja_wszystkiego()
+{
+	PC = GetWorld()->GetFirstPlayerController();
+	WczytajGre(TEXT("Save 1"));
+	PrzeliczStatystyki(true);
+	TeleportujDoOstatniegoOgniska();
+}
 
 void UGameInstance_MOJ::TakeDamageAdvanced(
 	float Fizyczne,
@@ -68,9 +78,14 @@ void UGameInstance_MOJ::DodajXP(int Ilosc)
 	UE_LOG(LogTemp, Warning, TEXT("==== DODANO XP: %d | AKTUALNY XP W GAMEINSTANCE: %d ===="), Ilosc, AktualnyXP);
 }
 
-void UGameInstance_MOJ::Wyzeruj_XP()
+void UGameInstance_MOJ::Zgub_XP()
 {
-	AktualnyXP = 0;
+	As_Pojednynczy_save_1_postac->XP_Zaginione = AktualnyXP;
+	As_Pojednynczy_save_1_postac->Pozycja_XP_Zaginionego = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation();
+
+
+
+	AktualnyXP = 0;	
 }
 
 int UGameInstance_MOJ::Daj_mi_wymagane_XP_do_ulepszenia_postaci()
@@ -219,42 +234,16 @@ void UGameInstance_MOJ::Regeneruj_Stamine(int Ilosc_stamina)
 	}
 }
 
-void UGameInstance_MOJ::Odpocznij_Przy_Ognisku()
+void UGameInstance_MOJ::Odpocznij_Przy_Ognisku(FString RowOgniska)
 {
-	HP = Maksymalne_HP;
-	Wytrzymalosc = Maksymalna_Wytrzymalosc;
-	Mana = Maksymalna_Mana;
-}
-
-void UGameInstance_MOJ::Incjanizacja_wszystkiego()
-{
-	    PC = GetWorld()->GetFirstPlayerController();
-		
-		Maksymalne_HP = WyliczWartoscStatystyki(230.0f, Witalnosc, 5.1f, 0.9f);
-		HP = Maksymalne_HP;
-
-		
-		Obrazenia_Fizyczne = WyliczWartoscStatystyki(20.0f, Sila, 4.7f, 0.1f);
-		Maksymalna_Wytrzymalosc = WyliczWartoscStatystyki(39.0f, Sila, 5.0f, 0.7f);
-		Wytrzymalosc = Maksymalna_Wytrzymalosc;
-
-		
-		SzybkoscAtaku = WyliczWartoscStatystyki(15.0f, Zrecznosc, 1.0f, 0.1f);
-		NormalnaSzybkoscAtaku = SzybkoscAtaku;
-
-		Maksymalna_Mana = WyliczWartoscStatystyki(50.0f, Inteligencja, 4.0f, 0.9f);
-		Mana = Maksymalna_Mana;
-		Obrazenia_Magiczne = WyliczWartoscStatystyki(20.0f, Inteligencja, 10.0f, 0.2f);
-
-		
-		Maksymalne_Poise = WyliczWartoscStatystyki(50.0f, Poise_Build, 4.0f, 0.09f);
-		Poise = Maksymalne_Poise;
-
-		UE_LOG(LogTemp, Log, TEXT("Zainicjalizowano statystyki postaci na poziomie %d."), Level);
-	
-
-
-
+	if (!As_Pojednynczy_save_1_postac)
+	{
+		As_Pojednynczy_save_1_postac = Cast<UPojedynczy_save_1_postac>(UGameplayStatics::CreateSaveGameObject(UPojedynczy_save_1_postac::StaticClass()));
+	}
+	PrzeliczStatystyki(true);
+	As_Pojednynczy_save_1_postac->Zapisz_Ostatnie_ognisko = RowOgniska;
+	SaveGame(TEXT("Save 1"));
+	UGameplayStatics::OpenLevel(this, FName(TEXT("Scena_Glowna")));
 }
 
 int UGameInstance_MOJ::Wyliczanie_ulepszen_procentowych(float A, float Poziom_Statystyki, float B, float Baza, float C)
@@ -268,19 +257,14 @@ int UGameInstance_MOJ::Wyliczanie_ulepszen_procentowych(float A, float Poziom_St
 
 void UGameInstance_MOJ::Respawn()
 {
-	
-	Pojaw_gracza();
-
-
+	PrzeliczStatystyki(true);
+	SaveGame(TEXT("Save 1"));
+	UGameplayStatics::OpenLevel(this, FName(TEXT("Scena_Glowna")));
 }
 
 void UGameInstance_MOJ::Pojaw_gracza()
 {
 	
-	HP = Maksymalne_HP;
-	Mana = Maksymalna_Mana;
-	Wytrzymalosc = Maksymalna_Wytrzymalosc;
-
 	if (PC)
 	{
 
@@ -295,14 +279,156 @@ void UGameInstance_MOJ::Pojaw_gracza()
 		PC->SetInputMode(InputMode);
 	}
 
-	UGameplayStatics::OpenLevel(GetWorld(), FName("Scena_Glowna"));
+}
+
+void UGameInstance_MOJ::PrzeliczStatystyki(bool bPelneZasoby)
+{
+	Maksymalne_HP = WyliczWartoscStatystyki(230, Witalnosc, 5.1f, 0.9f);
+	Obrazenia_Fizyczne = WyliczWartoscStatystyki(20, Sila, 4.7f, 0.1f);
+	Maksymalna_Wytrzymalosc = WyliczWartoscStatystyki(39, Sila, 5.0f, 0.7f);
+	SzybkoscAtaku = WyliczWartoscStatystyki(15, Zrecznosc, 1.0f, 0.1f);
+	NormalnaSzybkoscAtaku = SzybkoscAtaku;
+	Maksymalna_Mana = WyliczWartoscStatystyki(50, Inteligencja, 4.0f, 0.9f);
+	Obrazenia_Magiczne = WyliczWartoscStatystyki(20, Inteligencja, 10.0f, 0.2f);
+	Maksymalne_Poise = WyliczWartoscStatystyki(50, Poise_Build, 4.0f, 0.09f);
+	Odpornosc_Fizyczna = Wyliczanie_ulepszen_procentowych(5, Sila, 3, 14, 8.833f);
+	Szansa_na_Obrazenia_Krytyczne = Wyliczanie_ulepszen_procentowych(3, Poise_Build, 2, 20, 20);
+	if (bPelneZasoby)
+	{
+		HP = Maksymalne_HP;
+		Mana = Maksymalna_Mana;
+		Wytrzymalosc = Maksymalna_Wytrzymalosc;
+		Poise = Maksymalne_Poise;
+	}
+}
+
+void UGameInstance_MOJ::WczytajGre(const FString& NazwaSave)
+{
+	UPojedynczy_save_1_postac* LoadedCharacter = Cast<UPojedynczy_save_1_postac>(UGameplayStatics::LoadGameFromSlot(NazwaSave, 0));
+	if (!LoadedCharacter)
+	{
+		As_Pojednynczy_save_1_postac = Cast<UPojedynczy_save_1_postac>(UGameplayStatics::CreateSaveGameObject(UPojedynczy_save_1_postac::StaticClass()));
+		return;
+	}
+	As_Pojednynczy_save_1_postac = LoadedCharacter;
+	Level = LoadedCharacter->Zapisz_level;
+	Sila = LoadedCharacter->Zapisz_statystyke_Sila;
+	Witalnosc = LoadedCharacter->Zapisz_statystyke_Witalnosc;
+	Zrecznosc = LoadedCharacter->Zapisz_statystyke_Zrecznosc;
+	Poise_Build = LoadedCharacter->Zapisz_statystyke_Poise_Build;
+	Inteligencja = LoadedCharacter->Zapisz_statystyke_Inteligencja;
+	AktualnyXP = LoadedCharacter->Zapisz_XP_twojej_postaci;
+}
+
+void UGameInstance_MOJ::TeleportujDoOstatniegoOgniska()
+{
+	if (!GetWorld() || !As_Pojednynczy_save_1_postac || As_Pojednynczy_save_1_postac->Zapisz_Ostatnie_ognisko.IsEmpty()) return;
+	for (TActorIterator<AOgnisko_Base> It(GetWorld()); It; ++It)
+	{
+		if (It->PobierzRowTable() == As_Pojednynczy_save_1_postac->Zapisz_Ostatnie_ognisko)
+		{
+			if (APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)) PlayerPawn->SetActorLocation(It->GetActorLocation());
+			return;
+		}
+	}
+}
+
+void UGameInstance_MOJ::ZapiszPokonanegoSpecjalnegoMoba(const FString& Identyfikator)
+{
+	if (As_Pojednynczy_save_1_postac && !As_Pojednynczy_save_1_postac->PokonaneSpecjalneMoby.Contains(Identyfikator))
+	{
+		As_Pojednynczy_save_1_postac->PokonaneSpecjalneMoby.Add(Identyfikator);
+		SaveGame(TEXT("Save 1"));
+	}
+}
+
+bool UGameInstance_MOJ::CzySpecjalnyMobJestPokonany(const FString& Identyfikator) const
+{
+	return As_Pojednynczy_save_1_postac && As_Pojednynczy_save_1_postac->PokonaneSpecjalneMoby.Contains(Identyfikator);
+}
+
+void UGameInstance_MOJ::ZapiszPokonanegoBossa(const FString& Identyfikator)
+{
+	if (As_Pojednynczy_save_1_postac && !As_Pojednynczy_save_1_postac->PokonaniBossowie.Contains(Identyfikator))
+	{
+		As_Pojednynczy_save_1_postac->PokonaniBossowie.Add(Identyfikator);
+		SaveGame(TEXT("Save 1"));
+	}
+}
+
+bool UGameInstance_MOJ::CzyBossJestPokonany(const FString& Identyfikator) const
+{
+	return As_Pojednynczy_save_1_postac && As_Pojednynczy_save_1_postac->PokonaniBossowie.Contains(Identyfikator);
+}
+
+void UGameInstance_MOJ::ZapiszOtwartaSkrzynke(const FString& Identyfikator)
+{
+	if (As_Pojednynczy_save_1_postac && !As_Pojednynczy_save_1_postac->OtwarteSkrzynki.Contains(Identyfikator))
+	{
+		As_Pojednynczy_save_1_postac->OtwarteSkrzynki.Add(Identyfikator);
+		SaveGame(TEXT("Save 1"));
+	}
+}
+
+bool UGameInstance_MOJ::CzySkrzynkaJestOtwarta(const FString& Identyfikator) const
+{
+	return As_Pojednynczy_save_1_postac && As_Pojednynczy_save_1_postac->OtwarteSkrzynki.Contains(Identyfikator);
+}
+
+void UGameInstance_MOJ::ZapiszOdkryteOgnisko(const FString& Identyfikator)
+{
+	if (As_Pojednynczy_save_1_postac && !As_Pojednynczy_save_1_postac->OdkryteOgniska.Contains(Identyfikator))
+	{
+		As_Pojednynczy_save_1_postac->OdkryteOgniska.Add(Identyfikator);
+		SaveGame(TEXT("Save 1"));
+	}
+}
+
+bool UGameInstance_MOJ::CzyOgniskoJestOdkryte(const FString& Identyfikator) const
+{
+	return As_Pojednynczy_save_1_postac && As_Pojednynczy_save_1_postac->OdkryteOgniska.Contains(Identyfikator);
 }
 
 
 //---- SAVE GAME -----\\
 
-void UGameInstance_MOJ::SaveGame()
-{}
+void UGameInstance_MOJ::SaveGame(FString Nazwa_save)
+{
+	
+	
+
+
+	if (As_Pojednynczy_save_1_postac)
+	{
+	
+		As_Pojednynczy_save_1_postac->Zapisz_level = Level;
+        
+		As_Pojednynczy_save_1_postac->Zapisz_statystyke_Sila = Sila;
+		As_Pojednynczy_save_1_postac->Zapisz_statystyke_Witalnosc = Witalnosc;
+		As_Pojednynczy_save_1_postac->Zapisz_statystyke_Zrecznosc = Zrecznosc;
+		As_Pojednynczy_save_1_postac->Zapisz_statystyke_Poise_Build = Poise_Build;
+		As_Pojednynczy_save_1_postac->Zapisz_statystyke_Inteligencja = Inteligencja;
+
+		As_Pojednynczy_save_1_postac->Zapisz_XP_twojej_postaci = AktualnyXP;
+
+		FString SlotName = Nazwa_save;
+		int32 UserIndex = 0;
+
+		if (UGameplayStatics::SaveGameToSlot(As_Pojednynczy_save_1_postac, SlotName, UserIndex))
+		{
+			UE_LOG(LogTemp, Log, TEXT("Gra została pomyślnie zapisana w slocie: %s"), *SlotName);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("Błąd! Nie udało się zapisać gry."));
+		}
+	}
+}
+
+void UGameInstance_MOJ::Przeladuj_swiat()
+{
+	Respawn();
+}
 
 
 

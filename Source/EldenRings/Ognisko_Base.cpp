@@ -1,5 +1,6 @@
 #include "Ognisko_Base.h"
 #include "Parent_Gracza.h"
+#include "GameInstance_MOJ.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -110,6 +111,10 @@ void AOgnisko_Base::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* 
 	}
 
 	bCzyGraczWStrefie = true;
+	if (UGameInstance_MOJ* GI = Cast<UGameInstance_MOJ>(Gracza->GetGameInstance()))
+	{
+		GI->UstawGraczaPrzyOgnisku(true);
+	}
 	Gracza->SetNearbyCampfire(this);
 }
 
@@ -127,6 +132,10 @@ void AOgnisko_Base::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* Ot
 	}
 
 	bCzyGraczWStrefie = false;
+	if (UGameInstance_MOJ* GI = Cast<UGameInstance_MOJ>(Gracza->GetGameInstance()))
+	{
+		GI->UstawGraczaPrzyOgnisku(false);
+	}
 	Gracza->ClearNearbyCampfire(this);
 
 	if (bMenuOtworzone)
