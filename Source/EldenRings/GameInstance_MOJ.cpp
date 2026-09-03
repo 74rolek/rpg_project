@@ -129,6 +129,8 @@ bool UGameInstance_MOJ::UlepszStatystykeSila()
 		Maksymalna_Wytrzymalosc = WyliczWartoscStatystyki(39,Sila,5,0.7f );
 		Wytrzymalosc = Maksymalna_Wytrzymalosc;
 
+		SaveGame(TEXT("Save 1"));
+
 		return true;
 	}
 	return false;
@@ -145,8 +147,12 @@ bool UGameInstance_MOJ::UlepszStatystykeWitalnosc()
 		Witalnosc++;
 		Maksymalne_HP = WyliczWartoscStatystyki(230, Witalnosc, 5.1f,0.9f);
 		HP = Maksymalne_HP;
+		
+		SaveGame(TEXT("Save 1"));
+
 		return true;
 	}
+
 	return false;
 }
 
@@ -161,6 +167,8 @@ bool UGameInstance_MOJ::UlepszStatystykeZrecznosc()
 		Zrecznosc++;
 
 		SzybkoscAtaku = WyliczWartoscStatystyki(15,Zrecznosc,1,0.1f);
+
+		SaveGame(TEXT("Save 1"));
 
 		return true;
 	}
@@ -178,6 +186,9 @@ bool UGameInstance_MOJ::UlepszStatystykeInteligencja()
 		Inteligencja++;
 		Maksymalna_Mana = WyliczWartoscStatystyki(50, Inteligencja, 4, 0.9f);
 		Obrazenia_Magiczne = WyliczWartoscStatystyki(20, Inteligencja, 10, 0.2f);
+		
+		SaveGame(TEXT("Save 1"));
+
 		return true;
 	}
 	return false;
@@ -199,6 +210,9 @@ bool UGameInstance_MOJ::UlepszStatystykePoise()
 		Maksymalne_Poise = WyliczWartoscStatystyki(50, Poise_Build, 4, 0.09f);
 		Szansa_na_Obrazenia_Krytyczne = Wyliczanie_ulepszen_procentowych(3,Poise_Build,2,20,20);
 		Poise = Maksymalne_Poise;
+		
+		SaveGame(TEXT("Save 1"));
+
 		return true;
 	}
 	return false;
@@ -278,6 +292,13 @@ void UGameInstance_MOJ::Pojaw_gracza()
 
 		PC->SetInputMode(InputMode);
 	}
+
+}
+
+void UGameInstance_MOJ::Shutdown()
+{
+
+	Na_wylanczaniu_gry();
 
 }
 
@@ -387,6 +408,13 @@ void UGameInstance_MOJ::ZapiszOdkryteOgnisko(const FString& Identyfikator)
 bool UGameInstance_MOJ::CzyOgniskoJestOdkryte(const FString& Identyfikator) const
 {
 	return As_Pojednynczy_save_1_postac && As_Pojednynczy_save_1_postac->OdkryteOgniska.Contains(Identyfikator);
+}
+
+void UGameInstance_MOJ::Na_wylanczaniu_gry()
+{
+
+	SaveGame(TEXT("Save 1"));
+
 }
 
 

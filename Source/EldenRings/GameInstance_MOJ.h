@@ -250,6 +250,18 @@ float Odpornosc_Fizyczna = 0.f;
 	UFUNCTION(BlueprintPure, Category = "SaveGame")
 	bool CzyOgniskoJestOdkryte(const FString& Identyfikator) const;
 
+	UFUNCTION(BlueprintCallable , Category = "SaveGame")
+	void Na_wylanczaniu_gry();
+
+
+
+
+
+
+	UFUNCTION()
+	virtual void Shutdown() override;
+
+
 private:
 	void PrzeliczStatystyki(bool bPelneZasoby);
 	void WczytajGre(const FString& NazwaSave);
