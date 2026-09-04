@@ -253,6 +253,13 @@ float Odpornosc_Fizyczna = 0.f;
 	UFUNCTION(BlueprintCallable , Category = "SaveGame")
 	void Na_wylanczaniu_gry();
 
+	UFUNCTION(BlueprintCallable)
+	void WczytajGre(const FString& NazwaSave);
+
+	UFUNCTION(BlueprintCallable)
+	void TeleportujDoOstatniegoOgniska();
+
+
 
 
 
@@ -264,9 +271,6 @@ float Odpornosc_Fizyczna = 0.f;
 
 private:
 	void PrzeliczStatystyki(bool bPelneZasoby);
-	void WczytajGre(const FString& NazwaSave);
-	void TeleportujDoOstatniegoOgniska();
-
-
+	
 
 };

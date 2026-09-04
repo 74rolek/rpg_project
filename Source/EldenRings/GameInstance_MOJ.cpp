@@ -255,7 +255,11 @@ void UGameInstance_MOJ::Odpocznij_Przy_Ognisku(FString RowOgniska)
 		As_Pojednynczy_save_1_postac = Cast<UPojedynczy_save_1_postac>(UGameplayStatics::CreateSaveGameObject(UPojedynczy_save_1_postac::StaticClass()));
 	}
 	PrzeliczStatystyki(true);
-	As_Pojednynczy_save_1_postac->Zapisz_Ostatnie_ognisko = RowOgniska;
+	if (As_Pojednynczy_save_1_postac)
+	{
+		As_Pojednynczy_save_1_postac->Zapisz_Ostatnie_ognisko = RowOgniska;
+	}
+	
 	SaveGame(TEXT("Save 1"));
 	UGameplayStatics::OpenLevel(this, FName(TEXT("Scena_Glowna")));
 }
