@@ -301,8 +301,7 @@ void UGameInstance_MOJ::Pojaw_gracza()
 
 void UGameInstance_MOJ::Shutdown()
 {
-
-	Na_wylanczaniu_gry();
+	Super::Shutdown();
 
 }
 
