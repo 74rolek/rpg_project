@@ -122,7 +122,7 @@ bool UGameInstance_MOJ::UlepszStatystykeSila()
 		AktualnyXP -= WymaganyXP;
 		PodniesLevel(1);
 		Sila++;
-		Obrazenia_Fizyczne = WyliczWartoscStatystyki(20, Sila, 4.7f, 0.1f);
+		Obrazenia_Fizyczne = WyliczWartoscStatystyki(12, Sila, 4.7f, 0.1f);
 		Odpornosc_Fizyczna = Wyliczanie_ulepszen_procentowych(5,Sila, 3 , 14, 8.833f);
 
 		
