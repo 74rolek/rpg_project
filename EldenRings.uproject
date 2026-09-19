@@ -40,6 +40,18 @@
 		{
 			"Name": "PhysicsToolsets",
 			"Enabled": true
+		},
+		{
+			"Name": "SmartObjects",
+			"Enabled": true
+		},
+		{
+			"Name": "MetaHumanCharacter",
+			"Enabled": true
+		},
+		{
+			"Name": "MetaHumanCoreTech",
+			"Enabled": true
 		}
 	]
 }
